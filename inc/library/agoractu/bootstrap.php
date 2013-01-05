@@ -30,7 +30,8 @@ class agoractu_bootstrap
 		agoractu_config::load(PATH . 'configuration');
 		$run = agoractu_router::dispatch();
 		if(!empty($run)) {
-			// TODO run controller, action and view here
+			// TODO run controller and action here
+			agoractu_view::getInstance()->dispatch($run);
 		}
 	}
 }

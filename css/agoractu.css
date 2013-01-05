@@ -1,0 +1,48 @@
+/**
+ * AgorActu
+ *
+ * RSS agregator with anonymous comments
+ *
+ * @link      https://github.com/rachyandco/agoractu/wiki
+ * @copyright 2012 Swiss Pirate Party (www.partipirate.ch)
+ * @version   0.1
+ */
+ 
+/* fix modal position for 480px devices */
+@media (max-width: 480px) 
+{
+	.modal.fade.in {
+		top: 10px;
+	}
+}
+
+/* button back to top*/
+#toTop {
+	display: none;
+	overflow: hidden;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	width: 51px;
+	height: 51px;
+	border: 0;
+	text-decoration: none;
+	text-indent: -999px;
+	background: url("img/ui.totop.png") no-repeat left top;
+}
+
+#toTopHover {
+	display: block;
+	overflow: hidden;
+	float: left;
+	width: 51px;
+	height: 51px;
+	background: url("img/ui.totop.png") no-repeat left -51px;
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	opacity: 0;
+}
+
+#toTop:active, #toTop:focus {
+	outline: none;
+}
