@@ -88,10 +88,8 @@ class agoractu_view
 		$this->self = $view;
 		foreach(array('header', $view, 'footer') as $file) {
 			$path = PATH . 'view/' . $file . '.php';
-			if(is_readable($path)) {
-				include $path;
-			} else {
-				throw new Exception('File "' . $path . '" not found, stopping view dispatch.');
+			if(!@include $path) {
+				throw new Exception('Failed to include "' . $path . '", stopping view dispatch.');
 			}
 		}
 	}

@@ -30,13 +30,13 @@ class agoractu_auto
 			define('PATH', dirname(__FILE__) . '/../../');	// __DIR__ is available in PHP > 5.3, using dirname(__FILE__) workaround to support older PHP versions
 		}
 		if(strpos($classname, '_') === FALSE) {
-			$filename = PATH . 'model/' . $classname . '.php';
+			$path = PATH . 'model/' . $classname . '.php';
 		} else {
-			$filename = PATH . 'library/' . str_replace('_', '/', $classname) . '.php';
+			$path = PATH . 'library/' . str_replace('_', '/', $classname) . '.php';
 		}
-		if(is_readable($filename)) {
-			return include $filename;
+		if(!$result = @include $path) {
+			throw new Exception('Failed to include "' . $path . '", stopping autoloading.');
 		}
-		return false;
+		return $result;
 	}
 }

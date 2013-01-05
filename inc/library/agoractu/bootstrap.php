@@ -30,8 +30,9 @@ class agoractu_bootstrap
 		agoractu_config::load(PATH . 'configuration');
 		$run = agoractu_router::dispatch();
 		if(!empty($run)) {
-			// TODO run controller and action here
+			agoractu_controller::factory($run)->dispatch();
 			agoractu_view::getInstance()->dispatch($run);
 		}
+		// TODO catch unhandled exceptions, log them and show the user a generic error page
 	}
 }
