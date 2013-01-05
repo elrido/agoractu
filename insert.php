@@ -18,19 +18,19 @@ $intsource=$_POST["expsource"];
 $intcurrent=$_POST["expcurrent"];
 $intlisttype=$_POST["explisttype"];
 
-if ($intcontent==NULL){
+if (strlen($intcontent) ==0){
 /*alert*/ 
 
 }else{
-	$up_query="INSERT INTO comments ( content, who, what_item_id ) VALUES ( '".htmlspecialchars($intcontent)."', '".htmlspecialchars($intuser)."' , '$intitemid')";
+	$up_query="INSERT INTO comments ( content, who, what_item_id, com_ip ) VALUES ( '".htmlspecialchars($intcontent)."', '".htmlspecialchars($intuser)."' , '$intitemid','".$_SERVER['REMOTE_ADDR']."')";
 	mysql_query($up_query) or die('Error, query failed');
 /*	echo $up_query;
 	echo "<br><a href=\"list.php\">Short List</a>"; */
-	echo "<script>
+}	echo "<script>
 <!--
 location.replace(\"".$intsource.".php?currentpage=".$intcurrent."&listtype=".$intlisttype."&postid=".$intitemid."#".$intitemid."\");
 -->
 </script>";
-}
+
 ?>
 

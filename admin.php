@@ -6,23 +6,14 @@
 /* This is admin.php - Read the readme.txt file for more information	*/
 /************************************************************************/
 
-
-
-
-
 include ("db.connect.php");
 include ("ins_header.php");
-
-
-//charger la configuration
-$QueryConfig ="select id,title,subtitle,titlehead,numrows from configuration";
-$ResultConfig = mysql_query($QueryConfig);
 
 //retour de l'action du formulaire
 if(isset($_POST['delete']))
 {
 $commid = $_POST['commid'];
-$up_query="DELETE FROM comments WHERE com_id ='$commid'";
+$up_query="UPDATE comments SET pub=2 WHERE com_id ='$commid'";
 	mysql_query($up_query) or die('Error, query failed');
 }
 
@@ -44,59 +35,82 @@ $num_rows = mysql_num_rows($result);
 <?
 if ($num_rows == 0) {
 
-echo "Il n'y pas de commentaires à modérer.";
+echo $lang['ADMIN_NOCOMMENTS'];
 	} else {
-echo "<h2>Commentaires à Modérer</h2>";
+echo "<h2>".$lang['ADMIN_COMMENTSAVAILABLE']."</h2>";
 	while ($line = mysql_fetch_row($result))
 		{
-echo "<div class=\"well\">";
-echo "<div>".$line[1]."</div>";
-echo "<div>Auteur : ".$line[2]."</div>";
-
-echo "<div class=\"btn-group\">
-<form   style=\"display: inline\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">
-<input type=hidden name=commid value=".$line[0].">
-<button class=\"btn btn-danger\"  type=submit name=delete value=delete>Supprimer</button>
-</form>&nbsp;
-<form style=\"display: inline\" method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">
-<input type=hidden name=commid value=".$line[0].">
-<button class=\"btn\"  type=submit name=restore value=restore>Remettre</button>
-</form>
-</div>";
-
-echo "</div>";
+?>
+<div class="well">
+	<div><? echo $line[1];?>"</div>
+		<div><? echo $lang['ADMIN_AUTHOR']; ?> : <? echo $line[2]; ?></div>
+		<div class="btn-group">
+			<form   style="display: inline" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
+			<input type=hidden name=commid value="<? echo $line[0]; ?>">
+			<button class="btn btn-danger"  type=submit name=delete value=delete><? echo $lang['ADMIN_DELETE']; ?></button>
+			</form>
+		&nbsp;
+			<form style="display: inline" method="post" action="<? echo $_SERVER['PHP_SELF']; ?>">
+			<input type=hidden name=commid value="<? echo $line[0]; ?>">
+			<button class="btn"  type=submit name=restore value=restore><? echo $lang['ADMIN_PUTBACK']; ?></button>
+			</form>
+		</div>
+	</div>
+<?
 		}
-
 	}
 ?>
 </div>
     <div class="span4 well mini-layout-sidebar">
-   <!--Sidebar content-->
-	<h2>Configuration</h2>
-<?
-  while ($lineconfig = mysql_fetch_row($ResultConfig))
-   {
+<!--Sidebar content-->
+<?   
+	echo "<h2>".$lang['ADMIN_PARAM_CONFIG']."</h2>";
+
+if ($param['CRON'] == 0)
+	{
+		$cronselectON = "selected=\"selected\"";
+		$cronselectOFF = "";
+	} else 
+	{
+		$cronselectOFF = "selected=\"selected\"";
+		$cronselectON = "";
+}
+
 echo "
 <form>
-<label>Titre du Site :</label>
-<input type=text name=configtitle value=\"".mb_convert_encoding($lineconfig[1],"UTF-8")."\">
-<label>Sous-Titre du Site :</label>
-<input type=text name=configsubtitle value=\"".mb_convert_encoding($lineconfig[2],"UTF-8")."\">
-<label>Titre du Site - dans la barre du navigateur :</label>
-<input type=text name=configtitlehead value=\"".mb_convert_encoding($lineconfig[3],"UTF-8")."\">
-<label>Nombre d'articles affichés par page :</label>
-<input type=text name=confignumrows value=\"".mb_convert_encoding($lineconfig[4],"UTF-8")."\">
-<label>Mise à jour automatique (désactiver si un cronjob est installé sur le serveur) :</label>
+<label>".$lang['ADMIN_PARAM_TITLE']." :</label>
+<input type=text name=configtitle value=\"".$param['TITLE']."\">
+<label>".$lang['ADMIN_PARAM_SUBTITLE']." :</label>
+<input type=text name=configsubtitle value=\"".$param['SUBTITLE']."\">
+<label>".$lang['ADMIN_PARAM_TITLELABEL']." :</label>
+<input type=text name=configtitlehead value=\"".$param['TITLEHEAD']."\">
+<label>".$lang['ADMIN_PARAM_NBARTICLES']." :</label>
+<input type=text name=confignumrows value=\"".$param['NUMROWS']."\">
+<label>".$lang['ADMIN_PARAM_AUTOUPDATE']." :</label>
 <select name=cron>
-<option value=0>Activée</option>
-<option value=1>Desactivée</option>
+<option value=0 ".$cronselectON.">".$lang['ADMIN_PARAM_ACTIVATED']."</option>
+<option value=1 ".$cronselectOFF.">".$lang['ADMIN_PARAM_DEACTIVATED']."</option>
 </select>
-<br>
-<button class=\"btn btn-primary\"  type=submit value=Save>Sauvegarder</button>
-<button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">Annuler</button>
+";
+
+// Admin Form - Get available languages
+echo "<label>".$lang['ADMIN_PARAM_SITELANGUAGE']." :</label>";
+echo "<select name=lang>";
+foreach($langarray as $langavail){
+if ($param['LANG'] == $langavail)
+	{$langselect = "selected=\"selected\"";
+	} else {
+	$langselect = "";
+}
+echo "<option value=\"".$langavail."\" ".$langselect.">".$langavail."</option>";
+}
+echo "</select>";
+
+echo "<br>
+<button class=\"btn btn-primary\"  type=submit value=Save>".$lang['ADMIN_PARAM_SAVE']."</button>
+<button class=\"btn\" data-dismiss=\"modal\" aria-hidden=\"true\">".$lang['ADMIN_PARAM_CANCEL']."</button>
 </form>
 ";
-}
 ?>
     </div>
     </div>

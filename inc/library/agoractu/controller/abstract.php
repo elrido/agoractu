@@ -25,6 +25,14 @@ abstract class agoractu_controller_abstract
 	private $_action;
 
 	/**
+	 * view
+	 *
+	 * @access private
+	 * @var    agoractu_view
+	 */
+	private $_view = NULL;
+
+	/**
 	 * initialize the default action
 	 *
 	 * @access public
@@ -50,5 +58,19 @@ abstract class agoractu_controller_abstract
 	public function dispatch()
 	{
 		$this->{$this->_action}();
+	}
+
+	/**
+	 * gets a view instance
+	 *
+	 * @access public
+	 * @return agoractu_view
+	 */
+	public function getView()
+	{
+		if(NULL === $this->_view) {
+			$this->_view = agoractu_view::getInstance();
+		}
+		return $this->_view;
 	}
 }

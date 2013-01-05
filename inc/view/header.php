@@ -37,9 +37,9 @@ flush();
 						<ul class="nav">
 							<li class="dropdown"><a id="drop1" role="button" class="dropdown-toggle" data-toggle="dropdown" href="#">Les Articles<b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>?listtype=0">Tous les derniers</a></li>
-									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>?listtype=1">Les Articles les plus commentés</a></li>
-									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>?listtype=2">Les derniers commentaires</a></li>
+									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>">Tous les derniers</a></li>
+									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>most-comments">Les Articles les plus commentés</a></li>
+									<li role=menuitem><a tabindex="-1" href="<?php echo $this->basePath() ?>last-comments">Les derniers commentaires</a></li>
 								</ul>
 							</li>
 							<li><a href="<?php echo $this->basePath() ?>feeds">Liste des feeds</a></li>
