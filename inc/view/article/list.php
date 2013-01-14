@@ -12,9 +12,6 @@
 				<div class="row-fluid">
 					<div class="span10">
 <?php
-
-
-
 /******  build the pagination links ******/
 // range of num links to show
 $range = 2;

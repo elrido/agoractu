@@ -25,14 +25,17 @@ class agoractu_bootstrap
 	 */
 	public function __construct()
 	{
-		require PATH . 'library/agoractu/auto.php';
-		spl_autoload_register('agoractu_auto::loader');
-		agoractu_config::load(PATH . 'configuration');
-		$run = agoractu_router::dispatch();
-		if(!empty($run)) {
-			agoractu_controller::factory($run)->dispatch();
-			agoractu_view::getInstance()->dispatch($run);
+		try {
+			require PATH . 'library/agoractu/auto.php';
+			spl_autoload_register('agoractu_auto::loader');
+			agoractu_config::load(PATH . 'configuration');
+			$run = agoractu_router::dispatch();
+			if(!empty($run)) {
+				agoractu_controller::factory($run)->dispatch();
+				agoractu_view::getInstance()->dispatch($run);
+			}
+		} catch (Exception $e) {
+			// TODO catch unhandled exceptions, log them and show the user a generic error page
 		}
-		// TODO catch unhandled exceptions, log them and show the user a generic error page
 	}
 }

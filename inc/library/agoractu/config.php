@@ -54,6 +54,31 @@ class agoractu_config
 	}
 
 	/**
+	 * checks if a configuration section or a single value exists
+	 *
+	 * @access public
+	 * @static
+	 * @param  string $section
+	 * @param  string $value
+	 * @throws Exception
+	 * @return bool
+	 */
+	public static function exists($section, $value = NULL)
+	{
+		if(!array_key_exists($section, self::$_config)) {
+			return FALSE;
+		}
+
+		if(empty($value)) {
+			return TRUE;
+		} elseif(!array_key_exists($value, self::$_config[$section])) {
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	}
+
+	/**
 	 * gets a configuration section or a single value
 	 *
 	 * @access public

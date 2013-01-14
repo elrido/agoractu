@@ -13,6 +13,7 @@ class agoractu_autoTest extends PHPUnit_Framework_TestCase
 {
 	public function testAutoloaderReturnsFalseWhenCallingNonExistingClass()
 	{
-		$this->assertFalse(agoractu_auto::loader('foo23_bar42'), 'calling non existent class');
+		$this->setExpectedException('Exception');
+		agoractu_auto::loader('foo23_bar42');
 	}
 }
