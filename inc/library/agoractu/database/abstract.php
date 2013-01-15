@@ -17,6 +17,14 @@
 abstract class agoractu_database_abstract
 {
 	/**
+	 * data of this object
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $_data = array();
+
+	/**
 	 * database object
 	 *
 	 * @access protected
@@ -25,7 +33,17 @@ abstract class agoractu_database_abstract
 	protected $_db = NULL;
 
 	/**
-	 * database table
+	 * database table rows
+	 *
+	 * @access protected
+	 * @var    array
+	 */
+	protected $_rows = array(
+		'id' => 'BIGINT(20) NOT NULL PRIMARY KEY',
+	);
+
+	/**
+	 * database table name
 	 *
 	 * @access protected
 	 * @var    string
@@ -46,6 +64,9 @@ abstract class agoractu_database_abstract
 			throw new Exception('Undefined database table name $_table in class "' . __CLASS__ . '".');
 		}
 
+		// prepare data array
+		$this->_data = array_fill_keys(array_keys($this->_rows), NULL);
+
 		// the database connection could be overwritten in the concrete class
 		if(NULL === $this->_db) {
 			$this->_db = agoractu_database::getInstance();
@@ -63,7 +84,32 @@ abstract class agoractu_database_abstract
 	 * @param  string $type
 	 * @return void
 	 */
-	abstract protected function _createTable($type);
+	protected function _createTable($type = 'mysql')
+	{
+		$db = $this->getDb();
+		$sql = 'CREATE TABLE ' . $this->getTable() . ' (';
+		$keys = '';
+		foreach($this->_rows as $row => $definition) {
+			if('mysql' == $type) {
+				foreach(array('PRIMARY KEY', 'UNIQUE') as $keyword) {
+					if(strpos($definition, $keyword) !== NULL) {
+						$definition = str_replace($keyword, '', $definition);
+						$keys .= ' ' . $keyword . ' (' . $row . '),';
+					}
+				}
+			}
+			$sql .= ' ' . $row . ' ' . $definition . ',';
+		}
+		if('mysql' == $type) {
+			if(!strlen($keys)) {
+				$sql = rtrim($sql, ',');
+			}
+			$sql .= ' ' . rtrim($keys, ',') . ' ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8';
+		} else {
+			$sql = rtrim($sql, ',') . ' )';
+		}
+		$this->getDb()->query($sql);
+	}
 
 	/**
 	 * checks if the current database table exists, optionally creates it
